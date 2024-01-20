@@ -1,121 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyRooms</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/222cea3eed.js"></script>
-</head>
-<body>
-    <!--This is adding buttons for the different servers-->
-    <div class="servers">
-        <div class="logo">
-            <img src="photos/Logo.png" alt="StudyRooms">
-        </div>
-        <div class="server-logo">
-            <span class="message__count">2</span>
-            <img src="photos/IMNmzX.jpg" alt="Order66">
-        </div>
-        <div class="server-logo">
-            <span class="message__count">645</span>
-            <img src="photos/Padm-Naberrie-Amidala-Skywalker-padme-naberrie-amidala-skywalker-17374225-1600-1200.jpg" alt="Anakin's secret project">
-        </div>
-        <div class="server-logo">
-            <span class="message__count">52</span>
-            <img src="photos/reytrainnighero.jpg" alt="Anakin's Training">
-        </div>
-    </div>
-
-    <div class="sidebar">
-        <div class="sidebar__top">
-            <input type="text" placeholder="Find or start a conversation">
-        </div>
-        <div class="sidebar__icon">
-            <i class="fas fa-compact-disc fa-lg"></i>
-            <span>Friends</span>
-        </div>
-        <div class="sidebar__users">
-            <div class="sidebar__usersHeader">
-                <div class="sidebar__header">
-                    <h4>Direct Messages</h4>
-                </div>
-                <i class="fas fa-plus sidebar__addUser"></i>
-            </div>
-            <div>
-                <div class="sidebar__user">
-                    <div>
-                        <span class="status"></span>
-                        <img src="photos/Anakin-anakin-skywalker-29859490-1280-1024.jpg" alt="Anakin">
-                    </div>
-                    <h4>Anakin</h4>
-                </div>
-                <div class="sidebar__user">
-                    <div>
-                        <span class="status"></span>
-                        <img src="photos/Obi-Wan-Kenobi-1.jpg" alt="Obi-Wan">
-                    </div>
-                    <h4>Obi-Wan</h4>
-                </div>
-                <div class="sidebar__user">
-                    <div>
-                        <span class="status"></span>
-                        <img src="photos/th.jpg" alt="Windu">
-                    </div>
-                    <h4>Windu</h4>
-                </div>
-                <div class="sidebar__user">
-                    <div>
-                        <span class="status"></span>
-                        <img src="photos/yoda-56a8f97a3df78cf772a263b4.jpg" alt="Yoda">
-                    </div>
-                    <h4>Yoda</h4>
-                </div>
-            </div>
-        </div>
-        <div class="sidebar__profile">
-            <div>
-                <span class="status"></span>
-                <img src="photos/CountDookuAOTC.png" alt="Dooku">
-            </div>
-            <div class="sidebar__profileInfo">
-                <h3>Dooku</h3>
-                <p>countDooku@hw.ac.uk</p>
-            </div>
-            <div class="sidebar__profileIcons">
-                <i class="fas fa-microphone"></i>
-                <i class="fas fa-headset"></i>
-                <i class="fas fa-cog"></i>
-            </div>
-        </div>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebRTC Demo</title>
+  </head>
+  <body>
+    <h2>1. Start your Webcam</h2>
     <div class="videos">
-        <span>
-          <h3>Local Stream</h3>
-          <video id="webcamVideo" autoplay playsinline></video>
-        </span>
-        <span>
-          <h3>Remote Stream</h3>
-          <video id="remoteVideo" autoplay playsinline></video>
-        </span>
-      </div>
-  
-      <button id="webcamButton">Start webcam</button>
-      <h2>2. Create a new Call</h2>
-      <button id="callButton" disabled>Create Call (offer)</button>
-  
-      <h2>3. Join a Call</h2>
-      <p>Answer the call from a different browser window or device</p>
-      
-      <input id="callInput" />
-      <button id="answerButton" disabled>Answer</button>
-  
-      <h2>4. Hangup</h2>
-  
-      <button id="hangupButton" disabled>Hangup</button>
-  
-      <script type="module" src="/main.js"></script>
-</body>
-</html>
+      <span>
+        <h3>Local Stream</h3>
+        <video id="webcamVideo" autoplay playsinline></video>
+      </span>
+      <span>
+        <h3>Remote Stream</h3>
+        <video id="remoteVideo" autoplay playsinline></video>
+      </span>
 
+
+    </div>
+
+    <button id="webcamButton">Start webcam</button>
+    <h2>2. Create a new Call</h2>
+    <button id="callButton" disabled>Create Call (offer)</button>
+
+    <h2>3. Join a Call</h2>
+    <p>Answer the call from a different browser window or device</p>
+    
+    <input id="callInput" />
+    <button id="answerButton" disabled>Answer</button>
+
+    <h2>4. Hangup</h2>
+
+    <button id="hangupButton" disabled>Hangup</button>
+
+    <script type="module" src="/main.js"></script>
+
+  </body>
+</html>
