@@ -106,7 +106,7 @@ callButton.onclick = async () => {
       }
     });
   
-    // Listen for remote ICE candidates
+    // Listen for remote ICE candidates, when answered adds more people to peer connection
     answerCandidates.onSnapshot(snapshot => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
@@ -116,3 +116,43 @@ callButton.onclick = async () => {
       });
     });
   }
+
+  answerButton.onclick = async () => {
+    const callId = callInput.value;
+    const callDoc = firestore.collection('calls').doc(callId);
+    const offerCandidates = callDoc.collection('offerCandidates');
+    const answerCandidates = callDoc.collection('answerCandidates');
+  
+    pc.onicecandidate = event => {
+      event.candidate && answerCandidates.add(event.candidate.toJSON());
+    };
+  
+    // Fetch data, then set the offer & answer
+  
+    const callData = (await callDoc.get()).data();
+  
+    const offerDescription = callData.offer;
+    await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
+  
+    const answerDescription = await pc.createAnswer();
+    await pc.setLocalDescription(answerDescription);
+  
+    const answer = {
+      type: answerDescription.type,
+      sdp: answerDescription.sdp,
+    };
+  
+    await callDoc.update({ answer });
+  
+    // Listen to offer candidates
+  
+    offerCandidates.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        console.log(change)
+        if (change.type === 'added') {
+          let data = change.doc.data();
+          pc.addIceCandidate(new RTCIceCandidate(data));
+        }
+      });
+    });
+  };
