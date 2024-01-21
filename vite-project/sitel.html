@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>StudyRooms</title>
+  </head>
+  <body>
+    <div class="conferenceCallDiv">
+        <h1>Conference Room 1</h1>
+
+        <!-- Participants Section -->
+        <div class="participants">
+          <div class="participant">
+            <img src="photos/Anakin-anakin-skywalker-29859490-1280-1024.jpg" alt="participant 1" class="participant-photo"><h2>Anakin Skywalker</h2>
+          </div>
+          <div class="participant">
+            <img src="photos/Obi-Wan-Kenobi-1.jpg" alt="participant 2" class="participant-photo"><h2>Obi-Wan-Kenobi</h2>
+          </div>
+          <div class="participant">
+            <img src="photos/yoda-56a8f97a3df78cf772a263b4.jpg" alt="participant 3" class="participant-photo"><h2>Yoda</h2>
+          </div>
+        </div>
+
+        <!-- Separator Line -->
+        <hr class="separator">
+
+        <!-- Videos Section -->
+        <div class="videos">
+          <span>
+            <video id="webcamVideo" autoplay playsinline></video>
+          </span>
+          <span>
+            <video id="remoteVideo" autoplay playsinline></video>
+          </span>
+        </div>
+
+        <!-- Separator Line -->
+        <hr class="separator">
+
+        <!-- Control Buttons and Inputs -->
+        <div class="controls">
+          <div class="buttonRows">
+            <button id="webcamButton">Start webcam</button> <button id="callButton" disabled>Create Call (offer)</button>
+          </div>
+          <div class="buttonRows">
+            <p>Enter the room code here:</p><input id="callInput"/>
+          </div>
+          <div class="buttonRows">
+            <button id="hangupButton" disabled>Leave</button> <button id="muteButton" disabled>Mute</button>
+          </div>
+        </div>
+            
+        <script type="module" src="/main.js"></script>
+    </div>
+  </body>
+</html>

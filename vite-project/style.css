@@ -1,0 +1,89 @@
+body {
+    margin: 0px;
+}
+
+video {
+  width: 10vw;
+  height: 7vw;
+  margin: 2px;
+  background: #2c3e50;
+}
+
+.conferenceCallDiv {
+    border-style: solid;
+    border-width: 5px;
+    width: 50vh;
+    height: 100vh;
+    box-sizing: border-box;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.participants {
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.participant {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.participant-photo {
+    width: 50px; /* Set the desired width */
+    height: 50px; /* Set the desired height */
+    border-radius: 50%; /* Make the photo circular */
+    margin: 5px; /* Adjust the margin as needed */
+}
+
+.videos {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    height: max-content;
+}
+
+.separator {
+    width: 100%;
+    border: 1px solid #2c3e50;
+    margin: 10px 0;
+}
+
+.controls {
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    padding-bottom: 10px;
+}
+
+h1 {
+    text-align: center;
+    border-style: none none solid none;
+    border-width: 1px;
+    padding-bottom: 20px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+p {
+    display: inline;
+}
+
+button {
+    font-size: 24px;
+    padding: 5px;
+    margin: 10px;
+    min-width: 200px;
+}
+
+.buttonRows {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
