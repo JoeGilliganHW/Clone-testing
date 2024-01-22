@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './src/App.jsx'
+import App from './App.jsx'
 import './style.css';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { RTCSessionDescription } from 'webrtc';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -22,7 +23,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+if(!firebase.apps.length){
+  firebase.initializeApp(firebaseConfig);
+}
 
 const firestore = firebase.firestore();
 
@@ -49,6 +52,7 @@ const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
 
 webcamButton.onclick = async () => {
+  alert("Hello")
   //attempts to get access to users media devices (webcam and microphone)
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();

@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="style.css"
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="style.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>StudyRooms</title>
   </head>
@@ -42,17 +43,18 @@
         <!-- Control Buttons and Inputs -->
         <div class="controls">
           <div class="buttonRows">
-            <button id="webcamButton">Start webcam</button> <button id="callButton" disabled>Create Call (offer)</button>
+            <button id="webcamButton">Start webcam</button> <button id="callButton" disabled>Create Room</button>
           </div>
           <div class="buttonRows">
             <p>Enter the room code here:</p><input id="callInput"/>
+          </div>
+            <div class="buttonRows"><button id="answerButton" disabled>Join</button>
           </div>
           <div class="buttonRows">
             <button id="hangupButton" disabled>Leave</button> <button id="muteButton" disabled>Mute</button>
           </div>
         </div>
-            
-        <script type="module" src="/main.js"></script>
     </div>
+    <script type="module" src="src/main.jsx"></script>
   </body>
 </html>
