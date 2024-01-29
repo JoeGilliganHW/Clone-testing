@@ -1,14 +1,6 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './src/App.jsx'
 import './style.css';
 import firebase from 'firebase/app';
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+import 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -50,7 +42,7 @@ const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
 
 webcamButton.onclick = async () => {
-  alert("Hello")
+  console.log("Hello");
   //attempts to get access to users media devices (webcam and microphone)
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
