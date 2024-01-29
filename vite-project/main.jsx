@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import App from './src/App.jsx'
 import './style.css';
 import firebase from 'firebase/app';
-import 'firebase/firestore';
 import { RTCSessionDescription } from 'webrtc';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
