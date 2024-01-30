@@ -113,6 +113,7 @@ callButton.onclick = async () => {
       });
     });
     hangupButton.disabled = false;
+    muteButton.disabled = false;
   }
 
   answerButton.onclick = async () => {
@@ -188,7 +189,7 @@ callButton.onclick = async () => {
   muteButton.onclick = async () => {
     // Toggle mute state
     const isMuted = localStream.getAudioTracks()[0].enabled;
-      
+    
     // Toggle audio tracks state
     localStream.getAudioTracks().forEach(track => {
       track.enabled = !isMuted;
