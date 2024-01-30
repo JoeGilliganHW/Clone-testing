@@ -40,6 +40,7 @@ const callInput = document.getElementById('callInput');
 const answerButton = document.getElementById('answerButton');
 const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
+const muteButton = document.getElementById('muteButton');
 
 webcamButton.onclick = async () => {
   alert("You are starting your webcam");
@@ -111,6 +112,7 @@ callButton.onclick = async () => {
         }
       });
     });
+    hangupButton.disabled = false;
   }
 
   answerButton.onclick = async () => {
@@ -181,4 +183,23 @@ callButton.onclick = async () => {
     callButton.disabled = false;
     answerButton.disabled = false;
     webcamButton.disabled = false;
-  }
+  };
+
+  muteButton.onclick = async () => {
+    // Toggle mute state
+    const isMuted = localStream.getAudioTracks()[0].enabled;
+      
+    // Toggle audio tracks state
+    localStream.getAudioTracks().forEach(track => {
+      track.enabled = !isMuted;
+    });
+    
+    // Update UI based on mute state
+    if (isMuted) {
+      alert("You are now unmuted");
+      // Change button text or icon to indicate unmuted state
+    } else {
+      alert("You are now muted");
+      // Change button text or icon to indicate muted state
+    }
+  };
