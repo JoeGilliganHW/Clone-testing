@@ -42,7 +42,7 @@ const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
 
 webcamButton.onclick = async () => {
-  console.log("Hello");
+  alert("You are starting your webcam");
   //attempts to get access to users media devices (webcam and microphone)
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
@@ -68,6 +68,7 @@ webcamButton.onclick = async () => {
 };
 
 callButton.onclick = async () => {
+  alert("You are creating a conference room, share the code with other users you want in the room");
   // Reference Firestore collections for signaling
     const callDoc = firestore.collection('calls').doc();
     const offerCandidates = callDoc.collection('offerCandidates');
@@ -113,6 +114,7 @@ callButton.onclick = async () => {
   }
 
   answerButton.onclick = async () => {
+    alert("You are joining a call");
     const callId = callInput.value;
     const callDoc = firestore.collection('calls').doc(callId);
     const offerCandidates = callDoc.collection('offerCandidates');
@@ -151,3 +153,32 @@ callButton.onclick = async () => {
       });
     });
   };
+
+  hangupButton.onclick = async () => {
+    alert("You are leaving this call");
+    // Close the peer connection
+    if (pc) {
+      pc.close();
+      pc = null; // Reset the peer connection
+    }
+
+    // Stop local stream and clear remote stream
+    if (localStream) {
+      localStream.getTracks().forEach((track) => {
+        track.stop(); // Stop tracks
+      });
+      localStream = null; // Reset local stream
+    }
+
+    if (remoteStream) {
+      remoteStream.getTracks().forEach((track) => {
+        track.stop(); // Stop tracks
+      });
+      remoteStream = null; // Reset remote stream
+    }
+
+    // Disable buttons and reset UI as needed
+    callButton.disabled = false;
+    answerButton.disabled = false;
+    webcamButton.disabled = false;
+  }
