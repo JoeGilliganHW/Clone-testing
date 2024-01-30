@@ -42,6 +42,9 @@ const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
 const muteButton = document.getElementById('muteButton');
 
+hangupButton.disabled = true;
+answerButton.disabled = true;
+
 webcamButton.onclick = async () => {
   alert("You are starting your webcam");
   //attempts to get access to users media devices (webcam and microphone)
@@ -184,6 +187,7 @@ callButton.onclick = async () => {
     callButton.disabled = false;
     answerButton.disabled = false;
     webcamButton.disabled = false;
+    muteButton.disabled = true;
   };
 
   muteButton.onclick = async () => {
