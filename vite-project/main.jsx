@@ -32,18 +32,28 @@ let pc = new RTCPeerConnection(servers);
 let localStream = null;
 let remoteStream = null;
 
-// HTML elements
+// HTML Buttons
 const webcamButton = document.getElementById('webcamButton');
-const webcamVideo = document.getElementById('webcamVideo');
 const callButton = document.getElementById('callButton');
 const callInput = document.getElementById('callInput');
 const answerButton = document.getElementById('answerButton');
-const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
 const muteButton = document.getElementById('muteButton');
 
+// HTML Video Section
+const videoContainer = document.getElementById('videos')
+const remoteVideo = document.getElementById('remoteVideo');
+const webcamVideo = document.getElementById('webcamVideo');
+
 hangupButton.disabled = true;
 answerButton.disabled = true;
+
+function createVideoElement(stream) {
+  const newVideo = document.createElement('video');
+  newVideo.autoplay = true;
+  newVideo.srcObject = stream;
+  videoContainer.appendChild(newVideo);
+}
 
 webcamButton.onclick = async () => {
   alert("You are starting your webcam");
