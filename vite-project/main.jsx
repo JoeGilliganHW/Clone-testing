@@ -199,8 +199,12 @@ callButton.onclick = async () => {
     if (isMuted) {
       alert("You are now unmuted");
       // Change button text or icon to indicate unmuted state
+      muteButton.value = "Mute";
+      
     } else {
       alert("You are now muted");
       // Change button text or icon to indicate muted state
+      muteButton.value = "Unmute";
+      
     }
   };
