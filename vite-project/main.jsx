@@ -122,6 +122,7 @@ callButton.onclick = async () => {
         }
       });
     });
+    alert("Test");
     hangupButton.disabled = false;
     muteButton.disabled = false;
     chatButton.disabled = false;
