@@ -1,5 +1,5 @@
 import './style.css';
-import { getFirestore, collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, onSnapshot, query, limit, getDocs, setDoc} from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
@@ -44,6 +44,10 @@ const videoContainer = document.getElementById('videos')
 const remoteVideo = document.getElementById('remoteVideo');
 const webcamVideo = document.getElementById('webcamVideo');
 
+//Candidates
+let offerCandidates = null;
+let answerCandidates = null;
+
 hangupButton.disabled = true;
 answerButton.disabled = true;
 
@@ -81,16 +85,23 @@ webcamButton.onclick = async () => {
 };
 
 callButton.onclick = async () => {
+  try{
   alert("You are creating a conference room, share the code with other users you want in the room");
   // Reference Firestore collections for signaling
-    const callDoc = firestore.collection('calls').doc();
-    const offerCandidates = collection(callDoc, 'offerCandidates');
-    const answerCandidates = collection(callDoc, 'answerCandidates');
+    const callDoc = collection(firestore, 'calls');
+    const callsQuery = query(callDoc, limit(1));
+    const querySnapshot = await getDocs(callsQuery);
+    let firstDocumentId = null;
+    if(!querySnapshot.empty){
+      const firstDocument = querySnapshot.docs[0];
+      firstDocumentId = firstDocument.id;
+
+    }
+    const callDocRef = doc(callDoc, firstDocumentId);
+    offerCandidates = collection(callDocRef, 'offerCandidates');
+    answerCandidates = collection(callDocRef, 'answerCandidates');
   
-    callInput.value = callDoc.id;
-  
-    // Get candidates for caller, save to db
-    onIceCandidate(pc, offerCandidates);
+    callInput.value = callDocRef.id;
   
     // Create offer
     const offerDescription = await pc.createOffer();
@@ -101,7 +112,7 @@ callButton.onclick = async () => {
       type: offerDescription.type,
     };
   
-    await callDoc.set({ offer });
+    await setDoc(callDocRef, offer);
   
     // Listen for remote answer from database, when received we update that answer on our peer connection
     onSnapshot(callDoc, (snapshot) => {
@@ -122,18 +133,27 @@ callButton.onclick = async () => {
         }
       });
     });
-    alert("Test");
     hangupButton.disabled = false;
     muteButton.disabled = false;
     chatButton.disabled = false;
+  }catch(error){
+    console.error("Error in callbuton.onClick: ", error);
   }
+  }
+
+  pc.onicecandidate = (event) => {
+    if (event.candidate) {
+        // Save the ICE candidate to the database
+        offerCandidates.add(event.candidate.toJSON());
+    }
+  };
 
   answerButton.onclick = async () => {
     alert("You are joining a call");
     const callId = callInput.value;
     const callDoc = firestore.collection('calls').doc(callId);
-    const offerCandidates = callDoc.collection('offerCandidates');
-    const answerCandidates = callDoc.collection('answerCandidates');
+    offerCandidates = callDoc.collection('offerCandidates');
+    answerCandidates = callDoc.collection('answerCandidates');
   
     pc.onicecandidate = event => {
       event.candidate && answerCandidates.add(event.candidate.toJSON());
