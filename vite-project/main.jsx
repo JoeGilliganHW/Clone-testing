@@ -84,15 +84,13 @@ callButton.onclick = async () => {
   alert("You are creating a conference room, share the code with other users you want in the room");
   // Reference Firestore collections for signaling
     const callDoc = firestore.collection('calls').doc();
-    const offerCandidates = callDoc.collection('offerCandidates');
-    const answerCandidates = callDoc.collection('answerCandidates');
+    const offerCandidates = collection(callDoc, 'offerCandidates');
+    const answerCandidates = collection(callDoc, 'answerCandidates');
   
     callInput.value = callDoc.id;
   
     // Get candidates for caller, save to db
-    pc.onicecandidate = event => {
-      event.candidate && offerCandidates.add(event.candidate.toJSON());
-    };
+    onIceCandidate(pc, offerCandidates);
   
     // Create offer
     const offerDescription = await pc.createOffer();
@@ -105,10 +103,10 @@ callButton.onclick = async () => {
   
     await callDoc.set({ offer });
   
-    // Listen for remote answer from database, when recieved we update that answer on out peer connection
-    callDoc.onSnapshot((snapshot) => {
+    // Listen for remote answer from database, when received we update that answer on our peer connection
+    onSnapshot(callDoc, (snapshot) => {
       const data = snapshot.data();
-      //if the peer doesnt have a remote description and the data doesnt have an answer then create an answer description
+      // If the peer doesn't have a remote description and the data doesn't have an answer, then create an answer description
       if (!pc.currentRemoteDescription && data?.answer) {
         const answerDescription = new RTCSessionDescription(data.answer);
         pc.setRemoteDescription(answerDescription);
@@ -116,7 +114,7 @@ callButton.onclick = async () => {
     });
   
     // Listen for remote ICE candidates, when answered adds more people to peer connection
-    answerCandidates.onSnapshot(snapshot => {
+    onSnapshot(answerCandidates, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
           const candidate = new RTCIceCandidate(change.doc.data());
