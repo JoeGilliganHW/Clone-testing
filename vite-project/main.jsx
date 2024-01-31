@@ -1,6 +1,6 @@
 import './style.css';
 import { getFirestore, collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
-import {getFirestore} from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
