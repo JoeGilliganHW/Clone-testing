@@ -1,6 +1,6 @@
 import './style.css';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import {initializeApp} from 'firebase/app';
+import {getFirestore} from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,11 +13,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-if(!firebase.apps.length){
-  firebase.initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
 
-const firestore = firebase.firestore();
+const firestore = getFirestore(app);
 
 const servers = {
   iceServers: [
@@ -39,6 +37,7 @@ const callInput = document.getElementById('callInput');
 const answerButton = document.getElementById('answerButton');
 const hangupButton = document.getElementById('hangupButton');
 const muteButton = document.getElementById('muteButton');
+const chatButton = document.getElementById('chatButton');
 
 // HTML Video Section
 const videoContainer = document.getElementById('videos')
@@ -127,6 +126,7 @@ callButton.onclick = async () => {
     });
     hangupButton.disabled = false;
     muteButton.disabled = false;
+    chatButton.disabled = false;
   }
 
   answerButton.onclick = async () => {
