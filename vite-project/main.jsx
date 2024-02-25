@@ -1,6 +1,7 @@
 import './style.css';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import {getFirestore, collection, getDocs} from 'firebase/firestore/lite';
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -10,12 +11,11 @@ const firebaseConfig = {
   storageBucket: "conference-call-c089e.appspot.com",
   messagingSenderId: "1046185829013",
   appId: "1:1046185829013:web:3c35917f945d12e8ee719c"
+
 };
 
-// Initialize Firebase
-if(!firebase.apps.length){
-  firebase.initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const firestore = firebase.firestore();
 
@@ -47,6 +47,8 @@ const webcamVideo = document.getElementById('webcamVideo');
 
 hangupButton.disabled = true;
 answerButton.disabled = true;
+callButton.disabled = true;
+muteButton.disabled = true;
 
 function createVideoElement(stream) {
   const newVideo = document.createElement('video');
@@ -79,33 +81,35 @@ webcamButton.onclick = async () => {
   callButton.disabled = false;
   answerButton.disabled = false;
   webcamButton.disabled = true;
+  muteButton.disabled = false;
 };
 
 callButton.onclick = async () => {
   alert("You are creating a conference room, share the code with other users you want in the room");
   // Reference Firestore collections for signaling
+    console.log("1");
     const callDoc = firestore.collection('calls').doc();
     const offerCandidates = callDoc.collection('offerCandidates');
     const answerCandidates = callDoc.collection('answerCandidates');
   
     callInput.value = callDoc.id;
-  
+    console.log("2");
     // Get candidates for caller, save to db
     pc.onicecandidate = event => {
       event.candidate && offerCandidates.add(event.candidate.toJSON());
     };
-  
+    console.log("3");
     // Create offer
     const offerDescription = await pc.createOffer();
     await pc.setLocalDescription(offerDescription);
-  
+    console.log("4");
     const offer = {
       sdp: offerDescription.sdp,
       type: offerDescription.type,
     };
-  
+    console.log("5");
     await callDoc.set({ offer });
-  
+    console.log("6");
     // Listen for remote answer from database, when recieved we update that answer on out peer connection
     callDoc.onSnapshot((snapshot) => {
       const data = snapshot.data();
@@ -115,7 +119,7 @@ callButton.onclick = async () => {
         pc.setRemoteDescription(answerDescription);
       }
     });
-  
+    console.log("7");
     // Listen for remote ICE candidates, when answered adds more people to peer connection
     answerCandidates.onSnapshot(snapshot => {
       snapshot.docChanges().forEach((change) => {
@@ -168,6 +172,8 @@ callButton.onclick = async () => {
         }
       });
     });
+    hangupButton.disabled = false;
+    muteButton.disabled = false;
   };
 
   hangupButton.onclick = async () => {
@@ -211,12 +217,12 @@ callButton.onclick = async () => {
     
     // Update UI based on mute state
     if (isMuted) {
-      alert("You are now unmuted");
+      alert("You are now muted");
       // Change button text or icon to indicate unmuted state
       muteButton.value = "Mute";
       
     } else {
-      alert("You are now muted");
+      alert("You are now unmuted");
       // Change button text or icon to indicate muted state
       muteButton.value = "Unmute";
       
