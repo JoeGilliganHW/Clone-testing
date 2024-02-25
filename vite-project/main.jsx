@@ -1,6 +1,6 @@
 import './style.css';
 import { initializeApp } from 'firebase/app';
-import {getFirestore, collection, getDocs} from 'firebase/firestore/lite';
+import {getFirestore, collection, doc, getDoc, setDoc, addDoc, onSnapshot} from 'firebase/firestore';
 
 
 // Your web app's Firebase configuration
@@ -16,8 +16,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-const firestore = firebase.firestore();
 
 const servers = {
   iceServers: [
@@ -86,17 +84,22 @@ webcamButton.onclick = async () => {
 
 callButton.onclick = async () => {
   alert("You are creating a conference room, share the code with other users you want in the room");
-  // Reference Firestore collections for signaling
     console.log("1");
-    const callDoc = firestore.collection('calls').doc();
-    const offerCandidates = callDoc.collection('offerCandidates');
-    const answerCandidates = callDoc.collection('answerCandidates');
+    //This is a collection in the firebase server it contains many documents
+    const callsCollection = collection(db, 'calls');
+
+    //This is a reference to the collection
+    const callsDocRef = doc(callsCollection);
+
+    const offerCandidates = collection(callsDocRef, 'offerCandidates');
+    const answerCandidates = collection(callsDocRef, 'answerCandidates');
   
-    callInput.value = callDoc.id;
+    callInput.value = callsDocRef.id;
+
     console.log("2");
     // Get candidates for caller, save to db
     pc.onicecandidate = event => {
-      event.candidate && offerCandidates.add(event.candidate.toJSON());
+      event.candidate && addDoc(offerCandidates, event.candidate.toJSON());
     };
     console.log("3");
     // Create offer
@@ -108,10 +111,10 @@ callButton.onclick = async () => {
       type: offerDescription.type,
     };
     console.log("5");
-    await callDoc.set({ offer });
+    await setDoc(callsDocRef, { offer });
     console.log("6");
     // Listen for remote answer from database, when recieved we update that answer on out peer connection
-    callDoc.onSnapshot((snapshot) => {
+    onSnapshot(callsDocRef, (snapshot) => {
       const data = snapshot.data();
       //if the peer doesnt have a remote description and the data doesnt have an answer then create an answer description
       if (!pc.currentRemoteDescription && data?.answer) {
@@ -121,7 +124,7 @@ callButton.onclick = async () => {
     });
     console.log("7");
     // Listen for remote ICE candidates, when answered adds more people to peer connection
-    answerCandidates.onSnapshot(snapshot => {
+    onSnapshot(answerCandidates, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
           const candidate = new RTCIceCandidate(change.doc.data());
