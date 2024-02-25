@@ -1,6 +1,6 @@
 import './style.css';
 import { initializeApp } from 'firebase/app';
-import {getFirestore, collection, doc, getDoc, setDoc, addDoc, onSnapshot} from 'firebase/firestore';
+import {getFirestore, collection, doc, getDoc, setDoc, addDoc, onSnapshot, updateDoc} from 'firebase/firestore';
 
 
 // Your web app's Firebase configuration
@@ -138,18 +138,22 @@ callButton.onclick = async () => {
 
   answerButton.onclick = async () => {
     alert("You are joining a call");
+    //This is the code for the room
     const callId = callInput.value;
-    const callDoc = firestore.collection('calls').doc(callId);
-    const offerCandidates = callDoc.collection('offerCandidates');
-    const answerCandidates = callDoc.collection('answerCandidates');
+    //this looks for the code in the server
+    const callDoc = doc(collection(db, 'calls'), callId);
+    //This gets the lists of of offer candidates
+    const offerCandidates = collection(callDoc, 'offerCandidates');
+    //This gets the lists of of answer candidates
+    const answerCandidates = collection(callDoc, 'answerCandidates');
   
     pc.onicecandidate = event => {
-      event.candidate && answerCandidates.add(event.candidate.toJSON());
+      event.candidate && addDoc(answerCandidates, event.candidate.toJSON());
     };
   
     // Fetch data, then set the offer & answer
   
-    const callData = (await callDoc.get()).data();
+    const callData = (await getDoc(callDoc)).data();
   
     const offerDescription = callData.offer;
     await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
@@ -162,11 +166,11 @@ callButton.onclick = async () => {
       sdp: answerDescription.sdp,
     };
   
-    await callDoc.update({ answer });
+    await updateDoc(callDoc, { answer });
   
     // Listen to offer candidates
   
-    offerCandidates.onSnapshot((snapshot) => {
+    onSnapshot(offerCandidates, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         console.log(change)
         if (change.type === 'added') {
