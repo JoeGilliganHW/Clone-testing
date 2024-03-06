@@ -1,12 +1,14 @@
 import './style.css';
 import { initializeApp } from 'firebase/app';
 import {getFirestore, collection, doc, getDoc, setDoc, addDoc, onSnapshot, updateDoc} from 'firebase/firestore';
+import {getDatabase, ref, set, onChildAdded} from 'firebase/database';
 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBhSE2SUPyU64wQYh_K9d0-ZPHVdSC-JpE",
   authDomain: "conference-call-c089e.firebaseapp.com",
+  databaseURL: "https://conference-call-c089e-default-rtdb.europe-west1.firebasedatabase.app/",
   projectId: "conference-call-c089e",
   storageBucket: "conference-call-c089e.appspot.com",
   messagingSenderId: "1046185829013",
@@ -16,6 +18,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const database = getDatabase(app);
 
 const servers = {
   iceServers: [
@@ -54,6 +57,27 @@ function createVideoElement(stream) {
   newVideo.srcObject = stream;
   videoContainer.appendChild(newVideo);
 }
+//This section is for the live chat
+//The first function is to send messages and the second part is to 
+document.getElementById("send-message").addEventListener("submit", postChat);
+function postChat(e) {
+  e.preventDefault();
+  const timestamp = Date.now();
+  const chatTxt = document.getElementById("chat-txt");
+  const message = chatTxt.value;
+  chatTxt.value = "";
+  const messageRef = ref(database, 'messages/' + timestamp);
+  set(messageRef, {
+    msg: message
+  });
+}
+
+const fetchChat = ref(database, 'messages');
+onChildAdded(fetchChat, (snapshot) => {
+  const messages = snapshot.val();
+  const msg = "<li>" + "Username: " + messages.msg + "</li>";
+  document.getElementById("messages").innerHTML += msg;
+});
 
 webcamButton.onclick = async () => {
   alert("You are starting your webcam");

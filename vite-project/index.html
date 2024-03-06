@@ -11,17 +11,13 @@
     <div class="conferenceCallDiv">
         <h1>Conference Room 1</h1>
 
-        <!-- Participants Section -->
-        <div class="participants">
-          <div class="participant">
-            <img src="photos/Anakin-anakin-skywalker-29859490-1280-1024.jpg" alt="participant 1" class="participant-photo"><h2>Anakin Skywalker</h2>
-          </div>
-          <div class="participant">
-            <img src="photos/Obi-Wan-Kenobi-1.jpg" alt="participant 2" class="participant-photo"><h2>Obi-Wan-Kenobi</h2>
-          </div>
-          <div class="participant">
-            <img src="photos/yoda-56a8f97a3df78cf772a263b4.jpg" alt="participant 3" class="participant-photo"><h2>Yoda</h2>
-          </div>
+        <!-- Chat Section -->
+        <div id="chat">     
+          <ul id="messages"></ul>
+          <form id="send-message">
+            <input id="chat-txt" type="text" />
+            <button id="chat-btn" type="submit">Submit</button>
+          </form>      
         </div>
 
         <!-- Separator Line -->
@@ -56,5 +52,7 @@
         </div>
     </div>
     <script type="module" src="/main.jsx"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
   </body>
 </html>
